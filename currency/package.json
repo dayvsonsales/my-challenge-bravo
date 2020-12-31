@@ -7,7 +7,8 @@
     "build": "babel src --extensions \".js,.ts\" --out-dir dist/src --copy-files",
     "start": "ts-node src/index.ts",
     "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/infra/http/server.ts",
-    "test": "NODE_ENV=test; jest"
+    "test": "NODE_ENV=test; jest",
+    "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
