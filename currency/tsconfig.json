@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "target": "es5",
+    "module": "commonjs",
+    "outDir": "../dist/",
+    "rootDir": ".",
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "baseUrl": "./src",
+    "paths": {
+      "@services/*": ["services/*"],
+      "@config/*": ["config/*"],
+      "@entities/*": ["infra/typeorm/entities/*"],
+      "@providers/*": ["providers/*"],
+      "@infra/*": ["infra/*"],
+      "@container/*": ["container/*"],
+      "@errors/*": ["errors/*"],
+      "@domain/*": ["domain/*"]
+    },
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "composite": true
+  },
+  "files": ["package.json"]
+}
