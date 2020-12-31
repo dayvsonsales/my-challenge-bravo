@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 @Entity('currencies')
-export default class Currency {
+class Currency {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -23,3 +23,5 @@ export default class Currency {
   @UpdateDateColumn()
   updated_at: Date;
 }
+
+export default Currency;
