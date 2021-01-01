@@ -8,6 +8,8 @@
   "logging": false,
   "entities": ["src/infra/typeorm/entities/*.ts"],
   "migrations": ["src/infra/typeorm/database/migrations/*.ts"],
+  "seeds": ["src/infra/typeorm/database/seeders/*.ts"],
+  "factories": ["src/infra/typeorm/database/factories/*.ts"],
   "cli": {
     "entitiesDir": "src/infra/typeorm/entities",
     "migrationsDir": "src/infra/typeorm/migrations"
