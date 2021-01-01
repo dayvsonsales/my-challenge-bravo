@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "target": "es5",
+    "module": "commonjs",
+    "rootDir": ".",
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "baseUrl": "../src",
+    "paths": {
+      "@services/*": ["services/*"],
+      "@config/*": ["config/*"],
+      "@providers/*": ["providers/*"],
+      "@entities/*": ["infra/typeorm/entities/*"],
+      "@infra/*": ["infra/*"],
+      "@container/*": ["container/*"],
+      "@errors/*": ["errors/*"],
+      "@domain/*": ["domain/*"]
+    },
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "references": [
+    // this is how we declare a dependency from
+    { "path": "../" } // this project to the one at the root dir`
+  ]
+}

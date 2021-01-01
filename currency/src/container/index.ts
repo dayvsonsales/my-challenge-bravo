@@ -20,6 +20,11 @@ container.registerSingleton<ICreateCurrencyService>(
   CreateCurrencyService,
 );
 
+container.registerSingleton<IListCurrencyService>(
+  'ListCurrencyService',
+  ListCurrencyService,
+);
+
 container.registerSingleton<ICurrencyRepository>(
   'CurrencyRepository',
   CurrencyRepository,
