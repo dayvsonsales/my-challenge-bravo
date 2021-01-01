@@ -2,6 +2,7 @@ import 'dotenv/config';
 import '../../setup';
 
 import express, { Request, Response, NextFunction } from 'express';
+import helmet from 'helmet';
 import cors from 'cors';
 import 'express-async-errors';
 import AppError from '@errors/AppError';
@@ -15,6 +16,7 @@ import '@infra/typeorm/database';
 
 const app = express();
 
+app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(routes);
