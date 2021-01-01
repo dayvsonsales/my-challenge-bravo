@@ -1,5 +1,4 @@
 import ICurrencyRepository from '@domain/ICurrencyRepository';
-import AppError from '@errors/AppError';
 import IDeleteCurrencyService from '@services/IDeleteCurrencyService';
 import { inject, injectable } from 'tsyringe';
 
@@ -11,14 +10,9 @@ class DeleteCurrencyService implements IDeleteCurrencyService {
   ) {}
 
   async execute(id: string): Promise<string> {
-    try {
-      await this.currencyRepository.findById(id);
-      await this.currencyRepository.delete(id);
+    const data = await this.currencyRepository.delete(id);
 
-      return id;
-    } catch (e) {
-      throw new AppError('The currency was not deleted', 500);
-    }
+    return data;
   }
 }
 
