@@ -1,5 +1,5 @@
 import ICurrencyRepository from '@domain/ICurrencyRepository';
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, In, Repository } from 'typeorm';
 import Currency from '@entities/Currency';
 import AppError from '@errors/AppError';
 
@@ -16,14 +16,14 @@ class CurrencyRepository implements ICurrencyRepository {
     return currencies;
   }
 
-  async findByName(name: string): Promise<Currency | undefined> {
+  async findByName(names: string[]): Promise<Currency[] | undefined> {
     const currencies = await this.ormRepository.find({
       where: {
-        name,
+        name: In(names),
       },
     });
 
-    return currencies[0];
+    return currencies;
   }
 
   async find(): Promise<Currency[]> {

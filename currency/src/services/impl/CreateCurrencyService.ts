@@ -14,9 +14,9 @@ class CreateCurrencyService implements ICreateCurrencyService {
   async execute(data: Currency): Promise<Currency> {
     const { name } = data;
 
-    const existsCurrency = await this.currencyRepository.findByName(name);
+    const existsCurrency = await this.currencyRepository.findByName([name]);
 
-    if (existsCurrency) {
+    if (existsCurrency && existsCurrency.length > 0) {
       throw new AppError('Currency already exists');
     }
 

@@ -61,6 +61,10 @@ class CurrencyConversionServiceProxy {
     amount: number,
     err: any,
   ): Promise<CurrencyConversionResponse | AppError> {
+    if (err && err instanceof AppError && err.statusCode === 404) {
+      return new AppError(err.message, err.statusCode);
+    }
+
     if (err && err.response?.status === 404) {
       this.circuitBreaker.close();
 

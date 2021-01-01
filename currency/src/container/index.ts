@@ -7,6 +7,8 @@ import CurrencyRepository from '@infra/typeorm/repositories/CurrencyRepository';
 import ICurrencyConversionService from '@services/ICurrencyConversionService';
 import ICreateCurrencyService from '@services/ICreateCurrencyService';
 import ICurrencyRepository from '@domain/ICurrencyRepository';
+import IListCurrencyService from '@services/IListCurrencyService';
+import ListCurrencyService from '@services/impl/ListCurrencyService';
 
 container.registerSingleton<ICurrencyConversionService>(
   'CurrencyConversionService',
@@ -21,4 +23,9 @@ container.registerSingleton<ICreateCurrencyService>(
 container.registerSingleton<ICurrencyRepository>(
   'CurrencyRepository',
   CurrencyRepository,
+);
+
+container.registerSingleton<IListCurrencyService>(
+  'ListCurrencyService',
+  ListCurrencyService,
 );

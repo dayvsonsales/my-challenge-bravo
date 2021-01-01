@@ -1,4 +1,4 @@
-import { inject, injectable } from 'tsyringe';
+import { container, inject, injectable } from 'tsyringe';
 
 import ICurrencyConversionService from '../ICurrencyConversionService';
 
@@ -7,6 +7,7 @@ import ICacheProvider from '@providers/CacheProvider/ICacheProvider';
 import CurrencyCache from '@domain/CurrencyCache';
 import ICurrencyConverterProvider from '@providers/CurrencyConverterProvider/ICurrencyConverterProvider';
 import CurrencyConversionResponse from '@domain/CurrencyConversionResponse';
+import ListCurrencyService from './ListCurrencyService';
 
 @injectable()
 class CurrencyConversionService implements ICurrencyConversionService {
@@ -23,6 +24,10 @@ class CurrencyConversionService implements ICurrencyConversionService {
     to: string,
     amount: number,
   ): Promise<CurrencyConversionResponse> {
+    const listCurrencyService = container.resolve(ListCurrencyService);
+
+    await listCurrencyService.exists(from, to);
+
     const conversionCache = await this.getConversionsInCache(
       `${from}-${to}`,
       amount,

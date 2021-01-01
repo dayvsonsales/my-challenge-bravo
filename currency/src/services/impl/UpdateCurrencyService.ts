@@ -19,13 +19,17 @@ class UpdateCurrencyService implements IUpdateCurrencyService {
     const currentCurrency = await this.currencyRepository.findById(id);
 
     if (!currentCurrency) {
-      throw new AppError('Invalid currency id');
+      throw new AppError('Invalid currency id', 404);
     }
 
-    const existsCurrency = await this.currencyRepository.findByName(name);
+    const existsCurrency = await this.currencyRepository.findByName([name]);
 
-    if (existsCurrency && existsCurrency.name !== currentCurrency.name) {
-      throw new AppError('Currency already exists');
+    if (
+      existsCurrency &&
+      existsCurrency.length > 0 &&
+      existsCurrency[0].name !== currentCurrency.name
+    ) {
+      throw new AppError('Currency already exists', 400);
     }
 
     const data = await this.currencyRepository.save({
