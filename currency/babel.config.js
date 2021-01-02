@@ -8,9 +8,15 @@ module.exports = {
       'module-resolver',
       {
         alias: {
-          '@modules': './src/modules',
           '@config': './src/config',
-          '@shared': './src/shared',
+          '@services': './src/services',
+          '@config': './src/config',
+          '@entities': './src/infra/typeorm/entities',
+          '@providers': './src/providers',
+          '@infra': './src/infra',
+          '@container': './src/container',
+          '@errors': './src/errors',
+          '@domain': './src/domain',
         },
       },
     ],

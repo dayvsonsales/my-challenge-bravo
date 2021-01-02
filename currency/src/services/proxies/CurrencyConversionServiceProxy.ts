@@ -3,7 +3,7 @@ import { inject, injectable, singleton } from 'tsyringe';
 import CircuitBreaker from 'opossum';
 import Cache from '@domain/CurrencyCache';
 import AppError from '@errors/AppError';
-import ICacheProvider from 'providers/CacheProvider/ICacheProvider';
+import ICacheProvider from '@providers/CacheProvider/ICacheProvider';
 import ICurrencyConversionService from '../ICurrencyConversionService';
 import CurrencyConversionResponse from '@domain/CurrencyConversionResponse';
 
