@@ -5,5 +5,6 @@ export default interface ICurrencyConverterProvider {
     from: string,
     to: string,
     amount: number,
+    ballast?: string,
   ): Promise<CurrencyConversionResponse>;
 }

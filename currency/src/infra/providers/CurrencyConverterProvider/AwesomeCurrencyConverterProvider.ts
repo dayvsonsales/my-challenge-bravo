@@ -32,16 +32,25 @@ class AwesomeCurrencyConverterProvider implements ICurrencyConverterProvider {
     from: string,
     to: string,
     amount: number,
+    ballast: string = 'USD',
   ): Promise<CurrencyConversionResponse> {
-    const getFromCurrencyInBRL = await this.getCurrencyValueInBRL(from);
-    const getToCurrencyInBRL = await this.getCurrencyValueInBRL(to);
+    const getFromCurrencyValue = await this.getCurrencyValueInBallast(
+      from,
+      ballast,
+    );
 
-    const fromToConversion = getFromCurrencyInBRL / getToCurrencyInBRL;
+    const getToCurrencyValue = await this.getCurrencyValueInBallast(
+      to,
+      ballast,
+    );
+
+    const fromToConversion = getFromCurrencyValue / getToCurrencyValue;
 
     const response = {
       from,
       to,
       bid: fromToConversion,
+      ballast,
       amountFrom: amount,
       resultTo: fromToConversion * amount,
       retrieveDate: new Date(),
@@ -50,9 +59,18 @@ class AwesomeCurrencyConverterProvider implements ICurrencyConverterProvider {
     return response;
   }
 
-  private async getCurrencyValueInBRL(from: string): Promise<number> {
+  private async getCurrencyValueInBallast(
+    from: string,
+    ballast: string,
+  ): Promise<number> {
+    const { data: usdToBRL } = await this.api.get(
+      `${API_URL}${CURRENCIES_ENDPOINT}/${ballast}-BRL`,
+    );
+
+    const usdToBRLResponse = usdToBRL[ballast] as CurrenciesResponseAPI;
+
     if (from === 'BRL') {
-      return 1;
+      return 1 / Number(usdToBRLResponse.bid);
     }
 
     const { data: fromToBRL } = await this.api.get(
@@ -65,7 +83,7 @@ class AwesomeCurrencyConverterProvider implements ICurrencyConverterProvider {
       throw new AppError(`Can't convert`, 500);
     }
 
-    return Number(fromToBRLResponse.bid);
+    return Number(fromToBRLResponse.bid) / Number(usdToBRLResponse.bid);
   }
 }
 
