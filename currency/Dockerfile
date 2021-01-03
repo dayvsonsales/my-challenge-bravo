@@ -9,6 +9,6 @@ RUN npm run build
 
 RUN chmod +x entrypoint.sh
 
-COPY .env /app/dist
+COPY tsconfig.json .env* /app/dist/
 
 ENTRYPOINT ["./entrypoint.sh"]
