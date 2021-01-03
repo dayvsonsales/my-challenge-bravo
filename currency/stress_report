@@ -1,0 +1,106 @@
+artillery quick -r 1000 -n 1 http://localhost:3333/currencies/convert\?from\=USD\&to\=BRL\&amount\=2000
+Started phase 0, duration: 60s @ 10:29:40(-0300) 2021-01-03
+Report @ 10:29:50(-0300) 2021-01-03
+Elapsed time: 10 seconds
+  Scenarios launched:  1429
+  Scenarios completed: 1420
+  Requests completed:  1420
+  Mean response/sec: 143.17
+  Response time (msec):
+    min: 29.1
+    max: 655.2
+    median: 155.7
+    p95: 353.5
+    p99: 401.4
+  Codes:
+    200: 1420
+
+Report @ 10:30:00(-0300) 2021-01-03
+Elapsed time: 20 seconds
+  Scenarios launched:  1663
+  Scenarios completed: 1595
+  Requests completed:  1595
+  Mean response/sec: 166.63
+  Response time (msec):
+    min: 31
+    max: 447.8
+    median: 204.6
+    p95: 360
+    p99: 402
+  Codes:
+    200: 1595
+
+Report @ 10:30:10(-0300) 2021-01-03
+Elapsed time: 30 seconds
+  Scenarios launched:  1969
+  Scenarios completed: 1563
+  Requests completed:  1563
+  Mean response/sec: 197.49
+  Response time (msec):
+    min: 318.6
+    max: 2242.2
+    median: 1591
+    p95: 2130.4
+    p99: 2198.5
+  Codes:
+    200: 1563
+
+Report @ 10:30:20(-0300) 2021-01-03
+Elapsed time: 40 seconds
+  Scenarios launched:  2036
+  Scenarios completed: 1625
+  Requests completed:  1625
+  Mean response/sec: 203.6
+  Response time (msec):
+    min: 2172.3
+    max: 4355.7
+    median: 3111.2
+    p95: 4120.7
+    p99: 4212.9
+  Codes:
+    200: 1625
+
+Report @ 10:30:30(-0300) 2021-01-03
+Elapsed time: 50 seconds
+  Scenarios launched:  1968
+  Scenarios completed: 1409
+  Requests completed:  1409
+  Mean response/sec: 197.39
+  Response time (msec):
+    min: 4118.7
+    max: 7337.2
+    median: 6130.8
+    p95: 7197.9
+    p99: 7263.4
+  Codes:
+    200: 1409
+
+Report @ 10:30:40(-0300) 2021-01-03
+Elapsed time: 1 minute, 0 seconds
+  Scenarios launched:  1999
+  Scenarios completed: 1511
+  Requests completed:  1511
+  Mean response/sec: 199.5
+  Response time (msec):
+    min: 7076.9
+    max: 9679
+    median: 8267.9
+    p95: 9467
+    p99: 9586.8
+  Codes:
+    200: 1511
+
+Report @ 10:30:50(-0300) 2021-01-03
+Elapsed time: 1 minute, 10 seconds
+  Scenarios launched:  1801
+  Scenarios completed: 1656
+  Requests completed:  1656
+  Mean response/sec: 179.03
+  Response time (msec):
+    min: 1812.6
+    max: 11555.5
+    median: 10207
+    p95: 11116.5
+    p99: 11439.3
+  Codes:
+    200: 1656

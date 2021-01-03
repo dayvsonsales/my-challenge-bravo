@@ -9,7 +9,7 @@ import CurrencyConversionResponse from '@domain/CurrencyConversionResponse';
 
 const circuitBreakerOptions = {
   errorThresholdPercentage: 50,
-  timeout: 7000,
+  timeout: 10000,
   resetTimeout: 5000,
 };
 
@@ -37,6 +37,7 @@ class CurrencyConversionServiceProxy {
 
     this.circuitBreaker.on('open', () => console.log('Circuit is open now'));
     this.circuitBreaker.fallback((from, to, amount, err) => {
+      console.log(err.message);
       return this.handleFallback(from, to, amount, err);
     });
   }
@@ -62,13 +63,18 @@ class CurrencyConversionServiceProxy {
     err: any,
   ): Promise<CurrencyConversionResponse | AppError> {
     if (err && err instanceof AppError && err.statusCode === 404) {
+      this.circuitBreaker.close();
+
       return new AppError(err.message, err.statusCode);
     }
 
     if (err && err.response?.status === 404) {
       this.circuitBreaker.close();
 
-      return new AppError('Currency not found', err.response.status);
+      return new AppError(
+        'Cannot convert ${from} to ${to}',
+        err.response.status,
+      );
     }
 
     const cached = await this.getConversionInCache(`${from}-${to}`, amount);
