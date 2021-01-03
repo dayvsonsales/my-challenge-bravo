@@ -24,7 +24,7 @@ const development = {
   password: 'docker',
   database: 'currency_db',
   logging: false,
-  entities: ['src/infra/typeorm/entities/*.js'],
+  entities: ['src/infra/typeorm/entities/*.ts'],
   migrations: ['src/infra/typeorm/database/migrations/*.ts'],
   seeds: ['src/infra/typeorm/database/seeders/*.ts'],
   factories: ['src/infra/typeorm/database/factories/*.ts'],
