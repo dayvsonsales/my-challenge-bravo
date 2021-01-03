@@ -13,6 +13,7 @@ import '@container/providers';
 import routes from './routes';
 
 import '@infra/typeorm/database';
+import { ValidationError } from 'yup';
 
 const app = express();
 
@@ -26,6 +27,16 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
     return response
       .status(err.statusCode)
       .json({ status: 'error', message: err.message });
+  }
+
+  if (err instanceof ValidationError) {
+    if (err.errors && err.errors.length > 1) {
+      return response
+        .status(400)
+        .json({ status: 'error', message: JSON.stringify(err.errors) });
+    }
+
+    return response.status(400).json({ status: 'error', message: err.message });
   }
 
   console.error(err);
