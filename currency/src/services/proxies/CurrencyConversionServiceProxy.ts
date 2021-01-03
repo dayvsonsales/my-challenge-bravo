@@ -37,7 +37,6 @@ class CurrencyConversionServiceProxy {
 
     this.circuitBreaker.on('open', () => console.log('Circuit is open now'));
     this.circuitBreaker.fallback((from, to, amount, err) => {
-      console.log(err.message);
       return this.handleFallback(from, to, amount, err);
     });
   }
@@ -65,14 +64,14 @@ class CurrencyConversionServiceProxy {
     if (err && err instanceof AppError && err.statusCode === 404) {
       this.circuitBreaker.close();
 
-      return new AppError(err.message, err.statusCode);
+      throw new AppError(err.message, err.statusCode);
     }
 
     if (err && err.response?.status === 404) {
       this.circuitBreaker.close();
 
-      return new AppError(
-        'Cannot convert ${from} to ${to}',
+      throw new AppError(
+        `Cannot convert ${from} to ${to}`,
         err.response.status,
       );
     }
@@ -80,7 +79,7 @@ class CurrencyConversionServiceProxy {
     const cached = await this.getConversionInCache(`${from}-${to}`, amount);
 
     if (!cached) {
-      return new AppError(
+      throw new AppError(
         'The internal service API is down. Try again later.',
         500,
       );
