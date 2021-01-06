@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import '../../setup';
 
 import express, { Request, Response, NextFunction } from 'express';
