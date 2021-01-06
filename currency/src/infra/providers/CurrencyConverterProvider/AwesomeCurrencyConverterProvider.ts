@@ -63,14 +63,14 @@ class AwesomeCurrencyConverterProvider implements ICurrencyConverterProvider {
     from: string,
     ballast: string,
   ): Promise<number> {
-    const { data: usdToBRL } = await this.api.get(
+    const { data: ballastToBRL } = await this.api.get(
       `${API_URL}${CURRENCIES_ENDPOINT}/${ballast}-BRL`,
     );
 
-    const usdToBRLResponse = usdToBRL[ballast] as CurrenciesResponseAPI;
+    const ballastToBRLResponse = ballastToBRL[ballast] as CurrenciesResponseAPI;
 
     if (from === 'BRL') {
-      return 1 / Number(usdToBRLResponse.bid);
+      return 1 / Number(ballastToBRLResponse.bid);
     }
 
     const { data: fromToBRL } = await this.api.get(
@@ -83,7 +83,7 @@ class AwesomeCurrencyConverterProvider implements ICurrencyConverterProvider {
       throw new AppError(`Can't convert`, 500);
     }
 
-    return Number(fromToBRLResponse.bid) / Number(usdToBRLResponse.bid);
+    return Number(fromToBRLResponse.bid) / Number(ballastToBRLResponse.bid);
   }
 }
 
