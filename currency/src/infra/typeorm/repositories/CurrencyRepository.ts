@@ -16,7 +16,7 @@ class CurrencyRepository implements ICurrencyRepository {
     return currencies;
   }
 
-  async findByName(names: string[]): Promise<Currency[] | undefined> {
+  async findByName(names: string[]): Promise<Currency[]> {
     const currencies = await this.ormRepository.find({
       where: {
         name: In(names),

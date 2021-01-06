@@ -2,13 +2,17 @@ import AppError from '@errors/AppError';
 import CurrencyConversionService from '@services/impl/CurrencyConversionService';
 import FakeCacheProvider from '../../providers/fakes/FakeCacheProvider';
 import FakeCurrencyConverterProvider from '../../providers/fakes/FakeCurrencyConverterProvider';
+import FakeCurrencyRepository from '../../repositories/fakes/FakeCurrencyRepository';
 import FakeListCurrencyService from '../fakes/FakeListCurrencyService';
 
 describe('Convert currency', () => {
   it('should be able to convert with valid currencies', async () => {
+    const fakeCurrencyRepository = new FakeCurrencyRepository();
     const fakeCacheProvider = new FakeCacheProvider();
     const fakeCurrencyProvider = new FakeCurrencyConverterProvider();
-    const fakeListCurrencyService = new FakeListCurrencyService();
+    const fakeListCurrencyService = new FakeListCurrencyService(
+      fakeCurrencyRepository,
+    );
 
     const currencyConversionService = new CurrencyConversionService(
       fakeCacheProvider,
@@ -29,9 +33,12 @@ describe('Convert currency', () => {
   });
 
   it('should not be able to convert with invalid currency', async () => {
+    const fakeCurrencyRepository = new FakeCurrencyRepository();
     const fakeCacheProvider = new FakeCacheProvider();
     const fakeCurrencyProvider = new FakeCurrencyConverterProvider();
-    const fakeListCurrencyService = new FakeListCurrencyService();
+    const fakeListCurrencyService = new FakeListCurrencyService(
+      fakeCurrencyRepository,
+    );
 
     const currencyConversionService = new CurrencyConversionService(
       fakeCacheProvider,
@@ -45,9 +52,12 @@ describe('Convert currency', () => {
   });
 
   it('should be able to return cached conversion', async () => {
+    const fakeCurrencyRepository = new FakeCurrencyRepository();
     const fakeCacheProvider = new FakeCacheProvider();
     const fakeCurrencyProvider = new FakeCurrencyConverterProvider();
-    const fakeListCurrencyService = new FakeListCurrencyService();
+    const fakeListCurrencyService = new FakeListCurrencyService(
+      fakeCurrencyRepository,
+    );
 
     const currencyConversionService = new CurrencyConversionService(
       fakeCacheProvider,

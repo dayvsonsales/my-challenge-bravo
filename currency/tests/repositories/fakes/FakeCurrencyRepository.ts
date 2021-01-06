@@ -19,7 +19,7 @@ export default class FakeCurrencyRepository implements ICurrencyRepository {
     return currencies;
   }
 
-  async findByName(names: string[]): Promise<Currency[] | undefined> {
+  async findByName(names: string[]): Promise<Currency[]> {
     return this.currencies.filter(v => names.includes(v.name));
   }
 
