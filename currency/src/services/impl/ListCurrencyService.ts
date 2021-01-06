@@ -1,3 +1,4 @@
+import Currency from '@domain/Currency';
 import ICurrencyRepository from '@domain/ICurrencyRepository';
 import AppError from '@errors/AppError';
 import IListCurrencyService from '@services/IListCurrencyService';
@@ -10,6 +11,12 @@ class ListCurrencyService implements IListCurrencyService {
     private currencyRepository: ICurrencyRepository,
   ) {}
 
+  async findAll(): Promise<Currency[]> {
+    const currencies = await this.currencyRepository.find();
+
+    return currencies;
+  }
+
   async exists(
     currencyFrom: string,
     currencyTo: string,
@@ -20,7 +27,7 @@ class ListCurrencyService implements IListCurrencyService {
     ]);
 
     if (currencyFrom === currencyTo) {
-      if (exists?.length == 0) {
+      if (!exists || exists.length == 0) {
         throw new AppError("One or two currencies doesn't exist", 404);
       }
       return;

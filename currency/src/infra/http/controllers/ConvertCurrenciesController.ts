@@ -14,7 +14,7 @@ export default class ConvertCurrenciesController {
 
     if (!Number(amount)) {
       return response.status(400).send({
-        message: 'Bad request. Amount need to be a number',
+        message: 'Bad request. Amount needs to be a number',
       });
     }
 

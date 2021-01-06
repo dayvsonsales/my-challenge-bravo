@@ -1,6 +1,6 @@
-import CurrencyRepository from '@infra/typeorm/repositories/CurrencyRepository';
 import CreateCurrencyService from '@services/impl/CreateCurrencyService';
 import DeleteCurrencyService from '@services/impl/DeleteCurrencyService';
+import ListCurrencyService from '@services/impl/ListCurrencyService';
 import UpdateCurrencyService from '@services/impl/UpdateCurrencyService';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
@@ -19,9 +19,8 @@ const updateValidator = yup.object().shape({
 
 export default class CurrenciesController {
   async index(_: Request, response: Response): Promise<Response> {
-    const currencyRepository = new CurrencyRepository();
-
-    const currencies = await currencyRepository.find();
+    const listCurrencyService = container.resolve(ListCurrencyService);
+    const currencies = await listCurrencyService.findAll();
 
     return response.json(currencies);
   }
