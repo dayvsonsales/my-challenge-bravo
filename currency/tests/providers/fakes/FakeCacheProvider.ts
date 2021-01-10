@@ -14,6 +14,10 @@ class FakeCacheProvider implements ICacheProvider {
   async get(key: string): Promise<string | undefined> {
     return this.hashTable[key];
   }
+
+  isValid(date: Date): boolean {
+    return true;
+  }
 }
 
 export default FakeCacheProvider;

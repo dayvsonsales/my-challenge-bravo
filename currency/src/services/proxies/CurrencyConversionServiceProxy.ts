@@ -3,8 +3,11 @@ import { inject, injectable, singleton } from 'tsyringe';
 import CircuitBreaker from 'opossum';
 import Cache from '@domain/CurrencyCache';
 import AppError from '@errors/AppError';
-import ICacheProvider from '@providers/CacheProvider/ICacheProvider';
+
 import ICurrencyConversionService from '../ICurrencyConversionService';
+import ICacheProvider from '@providers/CacheProvider/ICacheProvider';
+import ILockProvider from '@providers/LockProvider/ILockProvider';
+
 import CurrencyConversionResponse from '@domain/CurrencyConversionResponse';
 
 const circuitBreakerOptions = {
@@ -18,14 +21,22 @@ const circuitBreakerOptions = {
 class CurrencyConversionServiceProxy {
   private circuitBreaker: CircuitBreaker;
 
+  private lock: any;
+  private unlocks: { [key: string]: any } = {};
+
   constructor(
     @inject('CurrencyConversionService')
     private currencyConversionService: ICurrencyConversionService,
 
     @inject('CacheProvider')
     private cacheProvider: ICacheProvider,
+
+    @inject('LockProvider')
+    private lockProvider: ILockProvider,
   ) {
     this.setupCircuits();
+
+    this.lock = this.lockProvider.getLockInstance();
   }
 
   private setupCircuits(): void {
@@ -46,11 +57,26 @@ class CurrencyConversionServiceProxy {
     to: string,
     amount: number,
   ): Promise<CurrencyConversionResponse> {
+    const conversionCache = await this.getConversionInCache(
+      `${from}-${to}`,
+      amount,
+    );
+
+    if (conversionCache) {
+      return conversionCache;
+    }
+
+    const unlock = await this.lock(`${from}-${to}-${amount}`);
+
+    this.unlocks[`${from}-${to}-${amount}`] = unlock;
+
     const conversion = (await this.circuitBreaker.fire(
       from,
       to,
       amount,
     )) as CurrencyConversionResponse;
+
+    this.unlocks[`${from}-${to}-${amount}`]();
 
     return conversion;
   }
@@ -61,22 +87,21 @@ class CurrencyConversionServiceProxy {
     amount: number,
     err: any,
   ): Promise<CurrencyConversionResponse | AppError> {
+    await this.unlocks[`${from}-${to}-${amount}`]();
+
+    delete this.unlocks[`${from}-${to}-${amount}`];
+
     if (err && err instanceof AppError && err.statusCode === 404) {
       this.circuitBreaker.close();
 
       throw new AppError(err.message, err.statusCode);
     }
 
-    if (err && err.response?.status === 404) {
-      this.circuitBreaker.close();
-
-      throw new AppError(
-        `Cannot convert ${from} to ${to}`,
-        err.response.status,
-      );
-    }
-
-    const cached = await this.getConversionInCache(`${from}-${to}`, amount);
+    const cached = await this.getConversionInCache(
+      `${from}-${to}`,
+      amount,
+      true,
+    );
 
     if (!cached) {
       throw new AppError(
@@ -91,14 +116,24 @@ class CurrencyConversionServiceProxy {
   private async getConversionInCache(
     key: string,
     amount: number,
+    outdated: boolean = false,
   ): Promise<CurrencyConversionResponse | null> {
     const cachedData = (await this.cacheProvider.get(key)) as Cache;
 
     if (cachedData) {
-      cachedData.conversion.outdated = true;
-      cachedData.conversion.resultTo = cachedData.conversion.bid * amount;
+      if (
+        amount === cachedData.conversion.amountFrom &&
+        this.cacheProvider.isValid(cachedData.date)
+      ) {
+        return cachedData.conversion;
+      }
 
-      return cachedData.conversion;
+      if (outdated) {
+        cachedData.conversion.outdated = true;
+        cachedData.conversion.resultTo = cachedData.conversion.bid * amount;
+
+        return cachedData.conversion;
+      }
     }
 
     return null;

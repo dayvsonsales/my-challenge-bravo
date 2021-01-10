@@ -2,9 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import ICurrencyConversionService from '../ICurrencyConversionService';
 
-import cacheConfig from '@config/cache';
 import ICacheProvider from '@providers/CacheProvider/ICacheProvider';
-import CurrencyCache from '@domain/CurrencyCache';
 import ICurrencyConverterProvider from '@providers/CurrencyConverterProvider/ICurrencyConverterProvider';
 import CurrencyConversionResponse from '@domain/CurrencyConversionResponse';
 import IListCurrencyService from '@services/IListCurrencyService';
@@ -29,15 +27,6 @@ class CurrencyConversionService implements ICurrencyConversionService {
   ): Promise<CurrencyConversionResponse> {
     await this.listCurrencyService.exists(from, to);
 
-    const conversionCache = await this.getConversionsInCache(
-      `${from}-${to}`,
-      amount,
-    );
-
-    if (conversionCache) {
-      return conversionCache;
-    }
-
     const conversionResponse = await this.currencyConverterProvider.convert(
       from,
       to,
@@ -50,24 +39,6 @@ class CurrencyConversionService implements ICurrencyConversionService {
     });
 
     return conversionResponse;
-  }
-
-  private async getConversionsInCache(
-    key: string,
-    amount: number,
-  ): Promise<CurrencyConversionResponse | null> {
-    const cache = (await this.cacheProvider.get(key)) as CurrencyCache;
-
-    if (
-      cache &&
-      amount === cache.conversion.amountFrom &&
-      new Date().getTime() - new Date(cache.date).getTime() <
-        Number(cacheConfig.resetTime) * 1000
-    ) {
-      return cache.conversion;
-    }
-
-    return null;
   }
 }
 
