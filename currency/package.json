@@ -33,6 +33,7 @@
     "opossum": "^5.1.1",
     "pg": "^8.3.3",
     "redis": "^3.0.2",
+    "redis-lock": "^0.1.4",
     "reflect-metadata": "^0.1.10",
     "sqlite3": "5.0.0",
     "ts-jest": "^26.4.4",

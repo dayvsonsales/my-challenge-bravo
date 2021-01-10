@@ -15,6 +15,13 @@ class RedisCacheProvider implements ICacheProvider {
     });
   }
 
+  isValid(date: Date): boolean {
+    return (
+      new Date().getTime() - new Date(date).getTime() <
+      Number(config.resetTime) * 1000
+    );
+  }
+
   async set(key: string, value: any): Promise<void> {
     await this.client.set(key, JSON.stringify(value));
   }
