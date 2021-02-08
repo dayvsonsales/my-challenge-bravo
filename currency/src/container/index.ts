@@ -29,8 +29,3 @@ container.registerSingleton<ICurrencyRepository>(
   'CurrencyRepository',
   CurrencyRepository,
 );
-
-container.registerSingleton<IListCurrencyService>(
-  'ListCurrencyService',
-  ListCurrencyService,
-);
