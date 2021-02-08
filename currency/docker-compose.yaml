@@ -34,6 +34,5 @@ services:
       CACHE_RESET_TIME: 1800
       TYPEORM_SEEDING_FACTORIES: dist/src/infra/typeorm/database/factories/*.js
       TYPEORM_SEEDING_SEEDS: dist/src/infra/typeorm/database/seeders/*.js
-
 volumes:
   db_data: {}

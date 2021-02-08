@@ -6,7 +6,6 @@ import AppError from '@errors/AppError';
 
 import ICurrencyConversionService from '../ICurrencyConversionService';
 import ICacheProvider from '@providers/CacheProvider/ICacheProvider';
-import ILockProvider from '@providers/LockProvider/ILockProvider';
 
 import CurrencyConversionResponse from '@domain/CurrencyConversionResponse';
 
@@ -21,22 +20,14 @@ const circuitBreakerOptions = {
 class CurrencyConversionServiceProxy {
   private circuitBreaker: CircuitBreaker;
 
-  private lock: any;
-  private unlocks: { [key: string]: any } = {};
-
   constructor(
     @inject('CurrencyConversionService')
     private currencyConversionService: ICurrencyConversionService,
 
     @inject('CacheProvider')
     private cacheProvider: ICacheProvider,
-
-    @inject('LockProvider')
-    private lockProvider: ILockProvider,
   ) {
     this.setupCircuits();
-
-    this.lock = this.lockProvider.getLockInstance();
   }
 
   private setupCircuits(): void {
@@ -66,17 +57,11 @@ class CurrencyConversionServiceProxy {
       return conversionCache;
     }
 
-    const unlock = await this.lock(`${from}-${to}-${amount}`);
-
-    this.unlocks[`${from}-${to}-${amount}`] = unlock;
-
     const conversion = (await this.circuitBreaker.fire(
       from,
       to,
       amount,
     )) as CurrencyConversionResponse;
-
-    this.unlocks[`${from}-${to}-${amount}`]();
 
     return conversion;
   }
@@ -85,12 +70,8 @@ class CurrencyConversionServiceProxy {
     from: string,
     to: string,
     amount: number,
-    err: any,
+    err: Error | AppError,
   ): Promise<CurrencyConversionResponse | AppError> {
-    await this.unlocks[`${from}-${to}-${amount}`]();
-
-    delete this.unlocks[`${from}-${to}-${amount}`];
-
     if (err && err instanceof AppError && err.statusCode === 404) {
       this.circuitBreaker.close();
 
@@ -128,12 +109,13 @@ class CurrencyConversionServiceProxy {
         return cachedData.conversion;
       }
 
+      cachedData.conversion.resultTo = cachedData.conversion.bid * amount;
+
       if (outdated) {
         cachedData.conversion.outdated = true;
-        cachedData.conversion.resultTo = cachedData.conversion.bid * amount;
-
-        return cachedData.conversion;
       }
+
+      return cachedData.conversion;
     }
 
     return null;
