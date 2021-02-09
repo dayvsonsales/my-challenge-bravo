@@ -38,6 +38,9 @@ class CurrencyConversionServiceProxy {
     );
 
     this.circuitBreaker.on('open', () => console.log('Circuit is open now'));
+    this.circuitBreaker.on('halfOpen', () =>
+      console.log('Circuit is half open now'),
+    );
     this.circuitBreaker.fallback((from, to, amount, err) => {
       return this.handleFallback(from, to, amount, err);
     });
@@ -109,11 +112,18 @@ class CurrencyConversionServiceProxy {
         return cachedData.conversion;
       }
 
-      cachedData.conversion.resultTo = cachedData.conversion.bid * amount;
+      if (this.cacheProvider.isValid(cachedData.date)) {
+        cachedData.conversion.resultTo = cachedData.conversion.bid * amount;
 
-      if (outdated) {
-        cachedData.conversion.outdated = true;
+        return cachedData.conversion;
       }
+
+      if (!outdated) {
+        return null;
+      }
+
+      cachedData.conversion.outdated = true;
+      cachedData.conversion.resultTo = cachedData.conversion.bid * amount;
 
       return cachedData.conversion;
     }

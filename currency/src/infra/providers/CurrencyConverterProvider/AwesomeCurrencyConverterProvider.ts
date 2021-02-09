@@ -52,7 +52,7 @@ class AwesomeCurrencyConverterProvider implements ICurrencyConverterProvider {
       bid: fromToConversion,
       ballast,
       amountFrom: amount,
-      resultTo: fromToConversion * amount,
+      resultTo: Number((fromToConversion * amount).toPrecision(2)),
       retrieveDate: new Date(),
     } as CurrencyConversionResponse;
 
