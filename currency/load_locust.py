@@ -10,6 +10,6 @@ class PlaylistRecommendation(FastHttpUser):
     connection_timeout = 1000
 
     @task
-    def valid_cities(self):
+    def convert_usd_to_brl(self):
       self.client.get(f"/currencies/convert?from=USD&to=BRL&amount=2000")
         
