@@ -15,9 +15,6 @@ class CurrencyConversionService implements ICurrencyConversionService {
 
     @inject('CurrencyConverterProvider')
     private currencyConverterProvider: ICurrencyConverterProvider,
-
-    @inject('ListCurrencyService')
-    private listCurrencyService: IListCurrencyService,
   ) {}
 
   async convert(
@@ -25,8 +22,6 @@ class CurrencyConversionService implements ICurrencyConversionService {
     to: string,
     amount: number,
   ): Promise<CurrencyConversionResponse> {
-    await this.listCurrencyService.exists(from, to);
-
     const conversionResponse = await this.currencyConverterProvider.convert(
       from,
       to,

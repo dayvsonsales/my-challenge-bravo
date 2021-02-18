@@ -10,14 +10,10 @@ describe('Convert currency', () => {
     const fakeCurrencyRepository = new FakeCurrencyRepository();
     const fakeCacheProvider = new FakeCacheProvider();
     const fakeCurrencyProvider = new FakeCurrencyConverterProvider();
-    const fakeListCurrencyService = new FakeListCurrencyService(
-      fakeCurrencyRepository,
-    );
 
     const currencyConversionService = new CurrencyConversionService(
       fakeCacheProvider,
       fakeCurrencyProvider,
-      fakeListCurrencyService,
     );
 
     const response = await currencyConversionService.convert('USD', 'BRL', 3);
@@ -36,14 +32,10 @@ describe('Convert currency', () => {
     const fakeCurrencyRepository = new FakeCurrencyRepository();
     const fakeCacheProvider = new FakeCacheProvider();
     const fakeCurrencyProvider = new FakeCurrencyConverterProvider();
-    const fakeListCurrencyService = new FakeListCurrencyService(
-      fakeCurrencyRepository,
-    );
 
     const currencyConversionService = new CurrencyConversionService(
       fakeCacheProvider,
       fakeCurrencyProvider,
-      fakeListCurrencyService,
     );
 
     expect(
@@ -55,14 +47,10 @@ describe('Convert currency', () => {
     const fakeCurrencyRepository = new FakeCurrencyRepository();
     const fakeCacheProvider = new FakeCacheProvider();
     const fakeCurrencyProvider = new FakeCurrencyConverterProvider();
-    const fakeListCurrencyService = new FakeListCurrencyService(
-      fakeCurrencyRepository,
-    );
 
     const currencyConversionService = new CurrencyConversionService(
       fakeCacheProvider,
       fakeCurrencyProvider,
-      fakeListCurrencyService,
     );
 
     const from = 'USD';

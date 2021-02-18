@@ -8,6 +8,7 @@ import ICurrencyConversionService from '../ICurrencyConversionService';
 import ICacheProvider from '@providers/CacheProvider/ICacheProvider';
 
 import CurrencyConversionResponse from '@domain/CurrencyConversionResponse';
+import IListCurrencyService from '@services/IListCurrencyService';
 
 const circuitBreakerOptions = {
   errorThresholdPercentage: 50,
@@ -26,6 +27,9 @@ class CurrencyConversionServiceProxy {
 
     @inject('CacheProvider')
     private cacheProvider: ICacheProvider,
+
+    @inject('ListCurrencyService')
+    private listCurrencyService: IListCurrencyService,
   ) {
     this.setupCircuits();
   }
@@ -41,6 +45,7 @@ class CurrencyConversionServiceProxy {
     this.circuitBreaker.on('halfOpen', () =>
       console.log('Circuit is half open now'),
     );
+    this.circuitBreaker.on('close', () => console.log('Circuit is closed'));
     this.circuitBreaker.fallback((from, to, amount, err) => {
       return this.handleFallback(from, to, amount, err);
     });
@@ -51,6 +56,8 @@ class CurrencyConversionServiceProxy {
     to: string,
     amount: number,
   ): Promise<CurrencyConversionResponse> {
+    await this.listCurrencyService.exists(from, to);
+
     const conversionCache = await this.getConversionInCache(
       `${from}-${to}`,
       amount,
@@ -73,12 +80,21 @@ class CurrencyConversionServiceProxy {
     from: string,
     to: string,
     amount: number,
-    err: Error | AppError,
+    err: any,
   ): Promise<CurrencyConversionResponse | AppError> {
     if (err && err instanceof AppError && err.statusCode === 404) {
       this.circuitBreaker.close();
 
       throw new AppError(err.message, err.statusCode);
+    }
+
+    if (err && err.response?.status === 404) {
+      this.circuitBreaker.close();
+
+      throw new AppError(
+        `Cannot convert ${from} to ${to}`,
+        err.response.status,
+      );
     }
 
     const cached = await this.getConversionInCache(
