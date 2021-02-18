@@ -69,13 +69,13 @@ class AwesomeCurrencyConverterProvider implements ICurrencyConverterProvider {
       return 1;
     }
 
-    const { data: ballastToBRL } = await this.api.get(
+    const { data: fromToBRL } = await this.api.get(
       `${API_URL}${CURRENCIES_ENDPOINT}/${from}-BRL`,
     );
 
-    const ballastToBRLResponse = ballastToBRL[from] as CurrenciesResponseAPI;
+    const fromToBRLResponse = fromToBRL[from] as CurrenciesResponseAPI;
 
-    return Number(ballastToBRLResponse.bid);
+    return Number(fromToBRLResponse.bid);
   }
 
   private async getCurrencyValueInBallast(
