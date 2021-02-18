@@ -1,0 +1,152 @@
+artillery quick -r 1000 -n 1 http://localhost:3333/currencies/convert\?from\=USD\&to\=BRL\&amount\=2000
+Started phase 0, duration: 60s @ 20:58:01(-0300) 2021-02-17
+Report @ 20:58:11(-0300) 2021-02-17
+Elapsed time: 10 seconds
+  Scenarios launched:  1527
+  Scenarios completed: 1285
+  Requests completed:  1285
+  Mean response/sec: 152.25
+  Response time (msec):
+    min: 1563.8
+    max: 5653.8
+    median: 3875.7
+    p95: 5224.8
+    p99: 5585.4
+  Codes:
+    200: 1283
+    500: 2
+
+Report @ 20:58:21(-0300) 2021-02-17
+Elapsed time: 20 seconds
+  Scenarios launched:  1618
+  Scenarios completed: 1849
+  Requests completed:  1849
+  Mean response/sec: 163.27
+  Response time (msec):
+    min: 16.1
+    max: 2063.9
+    median: 45.2
+    p95: 1495.3
+    p99: 1863.6
+  Codes:
+    200: 1849
+
+Report @ 20:58:31(-0300) 2021-02-17
+Elapsed time: 30 seconds
+  Scenarios launched:  1900
+  Scenarios completed: 1896
+  Requests completed:  1896
+  Mean response/sec: 190.57
+  Response time (msec):
+    min: 15.9
+    max: 211.5
+    median: 45.9
+    p95: 138.6
+    p99: 184.1
+  Codes:
+    200: 1896
+
+Report @ 20:58:41(-0300) 2021-02-17
+Elapsed time: 40 seconds
+  Scenarios launched:  1964
+  Scenarios completed: 1963
+  Requests completed:  1963
+  Mean response/sec: 196.01
+  Response time (msec):
+    min: 15.9
+    max: 295.7
+    median: 47.8
+    p95: 166.7
+    p99: 264
+  Codes:
+    200: 1963
+
+Report @ 20:58:51(-0300) 2021-02-17
+Elapsed time: 50 seconds
+  Scenarios launched:  2001
+  Scenarios completed: 2010
+  Requests completed:  2010
+  Mean response/sec: 200.5
+  Response time (msec):
+    min: 15.6
+    max: 222.6
+    median: 45.8
+    p95: 120.2
+    p99: 154.8
+  Codes:
+    200: 2010
+
+Report @ 20:59:01(-0300) 2021-02-17
+Elapsed time: 1 minute, 0 seconds
+  Scenarios launched:  2032
+  Scenarios completed: 1725
+  Requests completed:  1725
+  Mean response/sec: 203.81
+  Response time (msec):
+    min: 13.9
+    max: 1113.7
+    median: 44.8
+    p95: 1033.8
+    p99: 1075.8
+  Codes:
+    200: 1725
+
+Report @ 20:59:11(-0300) 2021-02-17
+Elapsed time: 1 minute, 10 seconds
+  Scenarios launched:  1893
+  Scenarios completed: 2199
+  Requests completed:  2199
+  Mean response/sec: 190.06
+  Response time (msec):
+    min: 16.3
+    max: 1324
+    median: 70.3
+    p95: 1169.2
+    p99: 1278
+  Codes:
+    200: 2199
+
+Report @ 20:59:21(-0300) 2021-02-17
+Elapsed time: 1 minute, 20 seconds
+  Scenarios launched:  1972
+  Scenarios completed: 1966
+  Requests completed:  1966
+  Mean response/sec: 197.99
+  Response time (msec):
+    min: 16
+    max: 199.4
+    median: 46.3
+    p95: 115.4
+    p99: 144.1
+  Codes:
+    200: 1966
+
+Report @ 20:59:31(-0300) 2021-02-17
+Elapsed time: 1 minute, 30 seconds
+  Scenarios launched:  1940
+  Scenarios completed: 1903
+  Requests completed:  1903
+  Mean response/sec: 194.39
+  Response time (msec):
+    min: 17.3
+    max: 203.7
+    median: 39
+    p95: 116.6
+    p99: 157.5
+  Codes:
+    200: 1903
+
+Report @ 20:59:41(-0300) 2021-02-17
+Elapsed time: 1 minute, 40 seconds
+  Scenarios launched:  1960
+  Scenarios completed: 2002
+  Requests completed:  2002
+  Mean response/sec: 196.98
+  Response time (msec):
+    min: 14.4
+    max: 249.2
+    median: 43.7
+    p95: 162.7
+    p99: 216.9
+  Codes:
+    200: 2002

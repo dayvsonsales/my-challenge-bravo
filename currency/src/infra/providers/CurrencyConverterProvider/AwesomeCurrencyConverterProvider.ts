@@ -1,5 +1,4 @@
 import CurrencyConversionResponse from '@domain/CurrencyConversionResponse';
-import AppError from '@errors/AppError';
 import ICurrencyConverterProvider from '@providers/CurrencyConverterProvider/ICurrencyConverterProvider';
 import IHTTPProvider from '@providers/HTTPProvider/IHTTPProvider';
 import { injectable, inject } from 'tsyringe';
@@ -34,15 +33,21 @@ class AwesomeCurrencyConverterProvider implements ICurrencyConverterProvider {
     amount: number,
     ballast: string = 'USD',
   ): Promise<CurrencyConversionResponse> {
-    const getFromCurrencyValue = await this.getCurrencyValueInBallast(
-      from,
-      ballast,
-    );
+    let getFromCurrencyValue;
+    let getToCurrencyValue;
 
-    const getToCurrencyValue = await this.getCurrencyValueInBallast(
-      to,
-      ballast,
-    );
+    if (ballast === 'BRL') {
+      getFromCurrencyValue = await this.getCurrencyValue(from);
+
+      getToCurrencyValue = await this.getCurrencyValue(to);
+    } else {
+      getFromCurrencyValue = await this.getCurrencyValueInBallast(
+        from,
+        ballast,
+      );
+
+      getToCurrencyValue = await this.getCurrencyValueInBallast(to, ballast);
+    }
 
     const fromToConversion = getFromCurrencyValue / getToCurrencyValue;
 
@@ -59,31 +64,28 @@ class AwesomeCurrencyConverterProvider implements ICurrencyConverterProvider {
     return response;
   }
 
+  private async getCurrencyValue(from: string): Promise<number> {
+    if (from === 'BRL') {
+      return 1;
+    }
+
+    const { data: ballastToBRL } = await this.api.get(
+      `${API_URL}${CURRENCIES_ENDPOINT}/${from}-BRL`,
+    );
+
+    const ballastToBRLResponse = ballastToBRL[from] as CurrenciesResponseAPI;
+
+    return Number(ballastToBRLResponse.bid);
+  }
+
   private async getCurrencyValueInBallast(
     from: string,
     ballast: string,
   ): Promise<number> {
-    const { data: ballastToBRL } = await this.api.get(
-      `${API_URL}${CURRENCIES_ENDPOINT}/${ballast}-BRL`,
-    );
+    const ballastToBRLResponse = await this.getCurrencyValue(ballast);
+    const fromToBRLResponse = await this.getCurrencyValue(from);
 
-    const ballastToBRLResponse = ballastToBRL[ballast] as CurrenciesResponseAPI;
-
-    if (from === 'BRL') {
-      return 1 / Number(ballastToBRLResponse.bid);
-    }
-
-    const { data: fromToBRL } = await this.api.get(
-      `${API_URL}${CURRENCIES_ENDPOINT}/${from}-BRL`,
-    );
-
-    const fromToBRLResponse = fromToBRL[from] as CurrenciesResponseAPI;
-
-    if (!Number(fromToBRLResponse.bid)) {
-      throw new AppError(`Can't convert`, 500);
-    }
-
-    return Number(fromToBRLResponse.bid) / Number(ballastToBRLResponse.bid);
+    return Number(fromToBRLResponse) / Number(ballastToBRLResponse);
   }
 }
 
