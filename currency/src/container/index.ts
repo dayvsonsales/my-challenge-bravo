@@ -10,22 +10,22 @@ import ICurrencyRepository from '@domain/ICurrencyRepository';
 import IListCurrencyService from '@services/IListCurrencyService';
 import ListCurrencyService from '@services/impl/ListCurrencyService';
 
-container.registerSingleton<ICurrencyConversionService>(
+container.register<ICurrencyConversionService>(
   'CurrencyConversionService',
   CurrencyConversionService,
 );
 
-container.registerSingleton<ICreateCurrencyService>(
+container.register<ICreateCurrencyService>(
   'CreateCurrencyService',
   CreateCurrencyService,
 );
 
-container.registerSingleton<IListCurrencyService>(
+container.register<IListCurrencyService>(
   'ListCurrencyService',
   ListCurrencyService,
 );
 
-container.registerSingleton<ICurrencyRepository>(
+container.register<ICurrencyRepository>(
   'CurrencyRepository',
   CurrencyRepository,
 );

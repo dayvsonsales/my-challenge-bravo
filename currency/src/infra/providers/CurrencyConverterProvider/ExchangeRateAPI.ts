@@ -17,11 +17,10 @@ export interface CurrenciesResponseAPI {
   create_date: Date;
 }
 
-const API_URL = 'https://economia.awesomeapi.com.br/json';
-const CURRENCIES_ENDPOINT = '/all';
+const API_URL = 'https://api.exchangeratesapi.io/latest?base=USD';
 
 @injectable()
-class AwesomeCurrencyConverterProvider implements ICurrencyConverterProvider {
+class ExchangeRateAPI implements ICurrencyConverterProvider {
   constructor(
     @inject('HTTPProvider')
     private api: IHTTPProvider,
@@ -31,14 +30,12 @@ class AwesomeCurrencyConverterProvider implements ICurrencyConverterProvider {
   ) {}
 
   async updateCurrenciesValues(): Promise<void> {
-    const { data: currencies } = await this.api.get(
-      `${API_URL}${CURRENCIES_ENDPOINT}`,
-    );
+    const { data: currencies } = await this.api.get(`${API_URL}`);
 
-    for (let currency in currencies) {
-      this.cacheProvider.set(`${currency}-BRL`, currencies[currency].bid);
+    for (let currency in currencies.rates) {
+      this.cacheProvider.set(`USD-${currency}`, currencies.rates[currency]);
     }
   }
 }
 
-export default AwesomeCurrencyConverterProvider;
+export default ExchangeRateAPI;

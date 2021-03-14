@@ -1,17 +1,25 @@
 import ICacheProvider from '../../../providers/CacheProvider/ICacheProvider';
 import config from '@config/cache';
-import asyncRedis from 'async-redis';
+import redis from 'redis';
+
+import { promisify } from 'util';
 
 import AppError from '@errors/AppError';
 
 class RedisCacheProvider implements ICacheProvider {
   private client: any;
+  private getAsync: any;
 
   constructor() {
-    this.client = asyncRedis.createClient(config.redis);
+    this.client = redis.createClient();
+    this.getAsync = promisify(this.client.get).bind(this.client);
 
     this.client.on('error', (error: any) => {
       throw new AppError(`Redis client error: ${error}`);
+    });
+
+    this.client.on('ready', () => {
+      console.log('Redis is ready');
     });
   }
 
@@ -23,13 +31,21 @@ class RedisCacheProvider implements ICacheProvider {
   }
 
   async set(key: string, value: any): Promise<void> {
-    await this.client.set(key, JSON.stringify(value));
+    return new Promise((resolve, reject) => {
+      this.client.set(key, value, (err: Error) => {
+        if (err) {
+          reject('Cannot set');
+        }
+
+        resolve();
+      });
+    });
   }
 
   async get(key: string): Promise<any | undefined> {
-    const value = await this.client.get(key);
+    const value = await this.getAsync(key);
 
-    return JSON.parse(value);
+    return value;
   }
 }
 

@@ -6,8 +6,7 @@ import IHTTPProvider from '@providers/HTTPProvider/IHTTPProvider';
 import AxiosHTTPProvider from '@infra/providers/HTTPProvider/AxiosHTTPProvider';
 import ICurrencyConverterProvider from '@providers/CurrencyConverterProvider/ICurrencyConverterProvider';
 import AwesomeCurrencyConverterProvider from '@infra/providers/CurrencyConverterProvider/AwesomeCurrencyConverterProvider';
-import ILockProvider from '@providers/LockProvider/ILockProvider';
-import RedisLockProvider from '@infra/providers/LockProvider/RedisLockProvider';
+import ExchangeRateAPI from '@infra/providers/CurrencyConverterProvider/ExchangeRateAPI';
 
 container.registerSingleton<ICacheProvider>(
   'CacheProvider',
@@ -16,9 +15,7 @@ container.registerSingleton<ICacheProvider>(
 
 container.registerSingleton<IHTTPProvider>('HTTPProvider', AxiosHTTPProvider);
 
-container.registerSingleton<ICurrencyConverterProvider>(
+container.register<ICurrencyConverterProvider>(
   'CurrencyConverterProvider',
-  AwesomeCurrencyConverterProvider,
+  ExchangeRateAPI,
 );
-
-container.registerSingleton<ILockProvider>('LockProvider', RedisLockProvider);

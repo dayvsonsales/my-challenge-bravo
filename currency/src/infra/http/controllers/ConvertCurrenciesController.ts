@@ -1,4 +1,4 @@
-import CurrencyConversionServiceProxy from '@services/proxies/CurrencyConversionServiceProxy';
+import CurrencyConversionService from '@services/impl/CurrencyConversionService';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
@@ -19,7 +19,7 @@ export default class ConvertCurrenciesController {
     }
 
     const currencyConversionServiceProxy = container.resolve(
-      CurrencyConversionServiceProxy,
+      CurrencyConversionService,
     );
 
     const resultConversion = await currencyConversionServiceProxy.convert(
