@@ -11,7 +11,7 @@ class RedisCacheProvider implements ICacheProvider {
   private getAsync: any;
 
   constructor() {
-    this.client = redis.createClient();
+    this.client = redis.createClient(config.redis);
     this.getAsync = promisify(this.client.get).bind(this.client);
 
     this.client.on('error', (error: any) => {
